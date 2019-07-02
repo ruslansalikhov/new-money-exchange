@@ -12,11 +12,12 @@ module.exports = function makeExchange(currency) {
 
     do {
         let [value, sym] = coins.pop();
-        while (currency >= value) {
-            currency -= value;
-            change[sym] = 1 + (!!change[sym] ? change[sym] : 0);
-        }
-    } while (coins.length > 0);
+
+        let quotient = Math.floor(currency / value);
+        currency %= value;
+
+        if (quotient > 0) change[sym] = quotient;
+    } while (coins.length > 0 && currency > 0);
 
     return change;
 }
